@@ -1,0 +1,3 @@
+[submodule "mqttclient.jl"]
+	path = mqttclient.jl
+	url = ../mqttclient.jl
