@@ -6,7 +6,7 @@ RUN apt-get -y install \
         zsh \
         git
 
-COPY . /app
-WORKDIR /app/script
+COPY . /sandbox
+WORKDIR /sandbox/script
 
 RUN julia -e "import Pkg; Pkg.activate(\".\"); Pkg.instantiate();"
