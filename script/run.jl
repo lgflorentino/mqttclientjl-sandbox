@@ -1,8 +1,9 @@
 import Pkg
+
+cd("../mqttclient.jl")
+
 Pkg.activate(".")
+Pkg.test()
 
-import MQTTClient
 
-client = Client()
-
-print("in run.jl")
+print("Exiting run.jl\n")

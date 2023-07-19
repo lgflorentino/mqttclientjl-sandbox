@@ -7,6 +7,10 @@ RUN apt-get -y install \
         git
 
 COPY . /sandbox
-WORKDIR /sandbox/script
 
+WORKDIR /sandbox/mqttclient.jl/
 RUN julia -e "import Pkg; Pkg.activate(\".\"); Pkg.instantiate();"
+
+WORKDIR /sandbox/script
+RUN julia -e "import Pkg; Pkg.activate(\".\"); Pkg.instantiate();"
+
