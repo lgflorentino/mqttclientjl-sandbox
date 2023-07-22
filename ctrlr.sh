@@ -19,6 +19,8 @@ if [[ "$1" = "run" ]] ;
 then
     docker run -it --rm \
     -e GITHUB_ACTION=0 \
+    -e UDS_TEST=$UDS_TEST \
+    -v /tmp/mqtt/mqtt.sock:/tmp/mqtt/mqtt.sock \
     -v $(pwd)/.julia:/root/.julia \
     -v $PRJ_ROOT:/sandbox \
     --name $DOCKER_CONT_NAME \
@@ -28,7 +30,7 @@ then
 elif [[ "$1" = "run-repl" ]];
 then
     docker run -it --rm \
-    -v /tmp/mosquitto/mosquitto.socket:/tmp/mosquitto/mosquitto.socket \
+    -v /tmp/mqtt/mqtt.sock:/tmp/mqtt/mqtt.sock \
     -v $(pwd)/.julia:/root/.julia \
     -v $PRJ_ROOT:/sandbox \
     --name $DOCKER_CONT_NAME \
@@ -50,6 +52,7 @@ exit 0
 :<<COMMENT
 Examples:
 \$$(basename $0) run tests
+UDS_TEST=true ./ctrlr.sh run tests
 \$$(basename $0) run-repl
 \$$(basename $0) clean
 \$$(basename $0) build
