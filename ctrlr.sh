@@ -14,20 +14,44 @@ SRC_D="$PRJ_ROOT/mqttclient.jl"
     echo "Exiting $(basename $0)" && \
     exit 1
 
-[[ "$1" = "build" ]] && \
-    docker build -t $DOCKER_IMG_NAME -f $DOCKERFILE .
-
 # the GITHUB_ACTION env var prevents the smoke tests from running
-[[ "$1" = "run" ]] && \
+if [[ "$1" = "run" ]] ; 
+then
     docker run -it --rm \
     -e GITHUB_ACTION=0 \
     -v $(pwd)/.julia:/root/.julia \
     -v $PRJ_ROOT:/sandbox \
     --name $DOCKER_CONT_NAME \
     $DOCKER_IMG_NAME \
-    julia run.jl
+    julia run.jl "${@:2}"
 
-[[ "$1" = "clean" ]] && \
+elif [[ "$1" = "run-repl" ]];
+then
+    docker run -it --rm \
+    -v /tmp/mosquitto/mosquitto.socket:/tmp/mosquitto/mosquitto.socket \
+    -v $(pwd)/.julia:/root/.julia \
+    -v $PRJ_ROOT:/sandbox \
+    --name $DOCKER_CONT_NAME \
+    $DOCKER_IMG_NAME \
+    julia
+
+elif [[ "$1" = "build" ]] ;
+then
+    docker build -t $DOCKER_IMG_NAME -f $DOCKERFILE .
+
+elif [[ "$1" = "clean" ]] ;
+then
     docker image rm $DOCKER_IMG_NAME
+fi
 
 echo "Exiting $(basename $0)"
+exit 0
+
+:<<COMMENT
+Examples:
+\$$(basename $0) run tests
+\$$(basename $0) run-repl
+\$$(basename $0) clean
+\$$(basename $0) build
+
+COMMENT
