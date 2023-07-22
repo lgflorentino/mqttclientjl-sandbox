@@ -53,6 +53,7 @@ exit 0
 Examples:
 \$$(basename $0) run tests
 UDS_TEST=true ./ctrlr.sh run tests
+./ctrlr.sh run test uds_client
 \$$(basename $0) run-repl
 \$$(basename $0) clean
 \$$(basename $0) build
